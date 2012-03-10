@@ -2,6 +2,8 @@
 #include <QTextEdit>
 #include <QMessageBox>
 #include <QFileDialog>
+#include "PythonHighlighter.h"
+#include "PythonEdit.h"
 
 EditorManager::EditorManager(QTabWidget* tabWidget, QObject *parent) :
     QObject(parent),
@@ -166,9 +168,12 @@ void EditorManager::addOpenFile(OpenFile* file)
 
     connect(file, SIGNAL(documentModifiedStatusChanged(OpenFile*,bool)), this, SLOT(updateFileTitle(OpenFile*)));
 
-    QTextEdit* editor = new QTextEdit(m_tabWidget);
+    QTextEdit* editor = new PythonEdit(m_tabWidget);
+    new PythonHighlighter(file->document());
+
     file->registerReference(editor);
     editor->setDocument(file->document());
+    editor->setFontFamily("Courier New");
     m_tabWidget->addTab(editor, tabTitle(file));
     m_tabWidget->setCurrentWidget(editor);
 }
