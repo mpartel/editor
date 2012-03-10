@@ -42,7 +42,7 @@ bool OpenFile::save()
         emit writeError(this, m_lastError);
         return false;
     }
-    QByteArray data = m_doc->toPlainText().toLocal8Bit();
+    QByteArray data = m_doc->toPlainText().toUtf8();
     if (file.write(data) != data.length()) {
         m_lastError = file.errorString();
         emit writeError(this, m_lastError);
@@ -62,7 +62,7 @@ bool OpenFile::revertToSavedState()
         emit readError(this, m_lastError);
         return false;
     }
-    QString text = file.readAll();
+    QString text = QString::fromUtf8(file.readAll());
     if (file.error() != QFile::NoError) {
         m_lastError = file.errorString();
         emit readError(this, m_lastError);
