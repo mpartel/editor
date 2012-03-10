@@ -7,10 +7,9 @@ OpenFile::OpenFile(QString path, QObject* parent) :
     QObject(parent),
     m_path(path),
     m_doc(new QTextDocument(this)),
-    m_changedAfterLastSave(false),
     m_refcount(0)
 {
-    connect(m_doc, SIGNAL(contentsChanged()), this, SLOT(documentChanged()));
+    connect(m_doc, SIGNAL(modificationChanged(bool)), this, SLOT(emitDocumentModifiedStatusChanged(bool)));
 }
 
 QString OpenFile::title() const
@@ -30,9 +29,27 @@ void OpenFile::registerReference(QObject* obj)
 
 bool OpenFile::save()
 {
-    //TODO
-    //m_changedAfterLastSave = false;
-    //emit documentSaved(this);
+    if (m_path.isNull()) {
+        m_lastError = tr("Internal error: destination file not set.");
+        emit writeError(this, m_lastError);
+        return false;
+    }
+
+    QFile file(m_path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        m_lastError = file.errorString();
+        emit writeError(this, m_lastError);
+        return false;
+    }
+    QByteArray data = m_doc->toPlainText().toLocal8Bit();
+    if (file.write(data) != data.length()) {
+        m_lastError = file.errorString();
+        emit writeError(this, m_lastError);
+        return false;
+    }
+
+    m_doc->setModified(false);
+    emit documentSaved(this);
     return true;
 }
 
@@ -50,18 +67,19 @@ bool OpenFile::revertToSavedState()
         emit readError(this, m_lastError);
         return false;
     }
-    file.close();
 
     QTextCursor cursor(m_doc);
     cursor.insertText(text);
-    m_changedAfterLastSave = false;
+    m_doc->clearUndoRedoStacks();
+
+    m_doc->setModified(false);
+    emit documentLoaded(this);
     return true;
 }
 
-void OpenFile::documentChanged()
+void OpenFile::emitDocumentModifiedStatusChanged(bool newStatus)
 {
-    emit documentUnsaved(this);
-    m_changedAfterLastSave = true;
+    emit documentModifiedStatusChanged(this, newStatus);
 }
 
 void OpenFile::decrementRefcount()

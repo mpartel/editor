@@ -4,14 +4,14 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    m_lastOpenDir(QDir::currentPath())
+    ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
     m_editorViewManager = new EditorViewManager(ui->editorTabs, this);
 
     connect(this->ui->action_New, SIGNAL(triggered()), m_editorViewManager, SLOT(openNewFile()));
+    connect(this->ui->action_Save, SIGNAL(triggered()), m_editorViewManager, SLOT(saveRequested()));
     connect(this->ui->action_Quit, SIGNAL(triggered()), this, SLOT(close()));
 }
 
@@ -22,12 +22,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_action_Open_triggered()
 {
-    QFileDialog* dialog = new QFileDialog(this);
-    dialog->setAcceptMode(QFileDialog::AcceptOpen);
-    dialog->setFileMode(QFileDialog::ExistingFiles);
-    dialog->exec();
-    QList<QString> paths = dialog->selectedFiles();
+    QList<QString> paths = QFileDialog::getOpenFileNames(this);
     foreach (QString path, paths) {
         m_editorViewManager->openFile(path);
     }
+}
+
+void MainWindow::on_actionClose_Tab_triggered()
+{
+    m_editorViewManager->tabCloseRequested(ui->editorTabs->currentIndex());
 }

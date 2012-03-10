@@ -20,12 +20,11 @@ public:
 
 private slots:
     void on_action_Open_triggered();
+    void on_actionClose_Tab_triggered();
 
 private:
     Ui::MainWindow* ui;
     EditorViewManager* m_editorViewManager;
-
-    QString m_lastOpenDir;
 };
 
 #endif // MAINWINDOW_H
