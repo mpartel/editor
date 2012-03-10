@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QList>
+#include <QCloseEvent>
 #include "OpenFile.h"
 #include "EditorViewManager.h"
 
@@ -21,6 +22,9 @@ public:
 private slots:
     void on_action_Open_triggered();
     void on_actionClose_Tab_triggered();
+
+protected:
+    virtual void closeEvent(QCloseEvent* e);
 
 private:
     Ui::MainWindow* ui;

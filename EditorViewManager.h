@@ -20,6 +20,7 @@ public slots:
     void startNewFile();
     void openFile(QString path);
     bool saveRequested();
+    bool closeAllRequested();
     void tabCloseRequested(int index);
     
 private slots:

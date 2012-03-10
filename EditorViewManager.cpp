@@ -46,6 +46,28 @@ bool EditorViewManager::saveRequested()
     return false;
 }
 
+bool EditorViewManager::closeAllRequested()
+{
+    foreach (OpenFile* file, m_openFiles) {
+        if (file->document()->isModified()) {
+            int answer = confirmCloseUnsaved(file);
+            switch (answer) {
+            case QMessageBox::Discard:
+                break;
+            case QMessageBox::Save:
+                if (!saveRequested()) {
+                    return false;
+                }
+                break;
+            case QMessageBox::Cancel:
+            default:
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 void EditorViewManager::tabCloseRequested(int index)
 {
     QWidget* widget = m_tabWidget->widget(index);
@@ -156,7 +178,7 @@ int EditorViewManager::confirmCloseUnsaved(OpenFile* file)
     Q_UNUSED(file);
 
     QMessageBox msgBox;
-    msgBox.setText(tr("The file has been modified."));
+    msgBox.setText(tr("%1 has been modified.").arg(file->title()));
     msgBox.setInformativeText("Do you want to save it?");
     msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
     msgBox.setDefaultButton(QMessageBox::Save);

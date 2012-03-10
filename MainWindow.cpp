@@ -32,3 +32,12 @@ void MainWindow::on_actionClose_Tab_triggered()
 {
     m_editorViewManager->tabCloseRequested(ui->editorTabs->currentIndex());
 }
+
+void MainWindow::closeEvent(QCloseEvent* e)
+{
+    if (m_editorViewManager->closeAllRequested()) {
+        e->accept();
+    } else {
+        e->ignore();
+    }
+}
