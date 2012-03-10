@@ -70,10 +70,8 @@ bool EditorManager::closeAllRequested()
 
 void EditorManager::tabCloseRequested(int index)
 {
-    QWidget* widget = m_tabWidget->widget(index);
-    QTextEdit* editor = dynamic_cast<QTextEdit*>(widget);
-    if (editor) {
-        OpenFile* file = fileForDocument(editor->document());
+    OpenFile* file = fileForTab(index);
+    if (file) {
         if (file && file->document()->isModified()) {
             int answer = confirmCloseUnsaved(file);
             switch (answer) {
@@ -90,8 +88,18 @@ void EditorManager::tabCloseRequested(int index)
             }
         }
     }
+
+    QWidget* widget = m_tabWidget->widget(index);
     m_tabWidget->removeTab(index);
     delete widget;
+}
+
+void EditorManager::duplicateTab(int index)
+{
+    OpenFile* file = fileForTab(index);
+    if (file) {
+        addOpenFile(file);
+    }
 }
 
 void EditorManager::fileUnreferenced(OpenFile* file)
@@ -184,6 +192,17 @@ int EditorManager::confirmCloseUnsaved(OpenFile* file)
     msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
     msgBox.setDefaultButton(QMessageBox::Save);
     return msgBox.exec();
+}
+
+OpenFile* EditorManager::fileForTab(int index) const
+{
+    QWidget* widget = m_tabWidget->widget(index);
+    QTextEdit* editor = dynamic_cast<QTextEdit*>(widget);
+    if (editor) {
+        return fileForDocument(editor->document());
+    } else {
+        return 0;
+    }
 }
 
 OpenFile* EditorManager::fileForDocument(QTextDocument* doc) const

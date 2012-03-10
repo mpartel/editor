@@ -14,3 +14,6 @@ HEADERS  += MainWindow.h \
     EditorManager.h
 
 FORMS    += MainWindow.ui
+
+OTHER_FILES += \
+    TODO.txt

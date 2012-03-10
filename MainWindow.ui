@@ -46,16 +46,17 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="action_New"/>
-    <addaction name="action_Open"/>
-    <addaction name="action_Save"/>
-    <addaction name="action_Quit"/>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">
      <string>Window</string>
     </property>
     <addaction name="actionClose_Tab"/>
+    <addaction name="actionDuplicate_Tab"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuWindow"/>
@@ -67,9 +68,9 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="action_New"/>
-   <addaction name="action_Open"/>
-   <addaction name="action_Save"/>
+   <addaction name="actionNew"/>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="leftDock">
@@ -96,7 +97,7 @@
     </layout>
    </widget>
   </widget>
-  <action name="action_Quit">
+  <action name="actionQuit">
    <property name="text">
     <string>&amp;Quit</string>
    </property>
@@ -104,7 +105,7 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="action_Open">
+  <action name="actionOpen">
    <property name="text">
     <string>&amp;Open</string>
    </property>
@@ -112,7 +113,7 @@
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="action_New">
+  <action name="actionNew">
    <property name="text">
     <string>&amp;New</string>
    </property>
@@ -122,18 +123,26 @@
   </action>
   <action name="actionClose_Tab">
    <property name="text">
-    <string>Close Tab</string>
+    <string>&amp;Close Tab</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+W</string>
    </property>
   </action>
-  <action name="action_Save">
+  <action name="actionSave">
    <property name="text">
     <string>&amp;Save</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionDuplicate_Tab">
+   <property name="text">
+    <string>&amp;Duplicate Tab</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+D</string>
    </property>
   </action>
  </widget>

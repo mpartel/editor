@@ -20,8 +20,9 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_action_Open_triggered();
+    void on_actionOpen_triggered();
     void on_actionClose_Tab_triggered();
+    void on_actionDuplicate_Tab_triggered();
 
 protected:
     virtual void closeEvent(QCloseEvent* e);

@@ -10,9 +10,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_editorViewManager = new EditorManager(ui->editorTabs, this);
 
-    connect(this->ui->action_New, SIGNAL(triggered()), m_editorViewManager, SLOT(startNewFile()));
-    connect(this->ui->action_Save, SIGNAL(triggered()), m_editorViewManager, SLOT(saveRequested()));
-    connect(this->ui->action_Quit, SIGNAL(triggered()), this, SLOT(close()));
+    connect(this->ui->actionNew, SIGNAL(triggered()), m_editorViewManager, SLOT(startNewFile()));
+    connect(this->ui->actionSave, SIGNAL(triggered()), m_editorViewManager, SLOT(saveRequested()));
+    connect(this->ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
 }
 
 MainWindow::~MainWindow()
@@ -20,7 +20,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_action_Open_triggered()
+void MainWindow::on_actionOpen_triggered()
 {
     QList<QString> paths = QFileDialog::getOpenFileNames(this);
     foreach (QString path, paths) {
@@ -30,7 +30,16 @@ void MainWindow::on_action_Open_triggered()
 
 void MainWindow::on_actionClose_Tab_triggered()
 {
-    m_editorViewManager->tabCloseRequested(ui->editorTabs->currentIndex());
+    if (ui->editorTabs->count() > 0) {
+        m_editorViewManager->tabCloseRequested(ui->editorTabs->currentIndex());
+    }
+}
+
+void MainWindow::on_actionDuplicate_Tab_triggered()
+{
+    if (ui->editorTabs->count() > 0) {
+        m_editorViewManager->duplicateTab(ui->editorTabs->currentIndex());
+    }
 }
 
 void MainWindow::closeEvent(QCloseEvent* e)

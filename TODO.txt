@@ -1,0 +1,2 @@
+- Support multiple tab widgets.
+- Detach tab into its own window or another tab widget.

@@ -24,6 +24,7 @@ public slots:
     bool saveRequested();
     bool closeAllRequested();
     void tabCloseRequested(int index);
+    void duplicateTab(int index);
     
 private slots:
     void fileUnreferenced(OpenFile* file);
@@ -46,6 +47,7 @@ private:
     QString tabTitle(OpenFile* file);
     int confirmCloseUnsaved(OpenFile* file);
 
+    OpenFile* fileForTab(int index) const;
     OpenFile* fileForDocument(QTextDocument* doc) const;
     QList<int> tabsForFile(OpenFile* file) const;
 };

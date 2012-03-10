@@ -83,7 +83,6 @@ void OpenFile::emitDocumentModifiedStatusChanged(bool newStatus)
     emit documentModifiedStatusChanged(this, newStatus);
 }
 
-#include <QDebug>
 void OpenFile::decrementRefcount()
 {
     m_refcount -= 1;
