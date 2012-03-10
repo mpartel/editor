@@ -17,9 +17,9 @@ public:
 signals:
     
 public slots:
-    void openNewFile();
+    void startNewFile();
     void openFile(QString path);
-    void saveRequested();
+    bool saveRequested();
     void tabCloseRequested(int index);
     
 private slots:
@@ -41,6 +41,7 @@ private:
     void addOpenFile(OpenFile* file);
 
     QString tabTitle(OpenFile* file);
+    int confirmCloseUnsaved(OpenFile* file);
 
     OpenFile* fileForDocument(QTextDocument* doc) const;
     QList<int> tabsForFile(OpenFile* file) const;

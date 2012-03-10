@@ -10,7 +10,7 @@ EditorViewManager::EditorViewManager(QTabWidget* tabWidget, QObject *parent) :
     connect(m_tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(tabCloseRequested(int)));
 }
 
-void EditorViewManager::openNewFile()
+void EditorViewManager::startNewFile()
 {
     OpenFile* file = new OpenFile(QString::null, this);
     connectErrorSignals(file);
@@ -30,19 +30,20 @@ void EditorViewManager::openFile(QString path)
     addOpenFile(file);
 }
 
-void EditorViewManager::saveRequested()
+bool EditorViewManager::saveRequested()
 {
     OpenFile* f = activeOpenFile();
     if (f) {
         if (f->isNewUnsavedFile()) {
             QString dest = QFileDialog::getSaveFileName(m_tabWidget, QString("Save file"));
             if (dest.isNull()) {
-                return;
+                return false;
             }
             f->setPath(dest);
         }
-        f->save();
+        return f->save();
     }
+    return false;
 }
 
 void EditorViewManager::tabCloseRequested(int index)
@@ -52,7 +53,19 @@ void EditorViewManager::tabCloseRequested(int index)
     if (editor) {
         OpenFile* file = fileForDocument(editor->document());
         if (file && file->document()->isModified()) {
-            //TODO: confirmation dialog
+            int answer = confirmCloseUnsaved(file);
+            switch (answer) {
+            case QMessageBox::Discard:
+                break;
+            case QMessageBox::Save:
+                if (!saveRequested()) {
+                    return;
+                }
+                break;
+            case QMessageBox::Cancel:
+            default:
+                return;
+            }
         }
     }
     m_tabWidget->removeTab(index);
@@ -136,6 +149,18 @@ QString EditorViewManager::tabTitle(OpenFile* file)
         result += "*";
     }
     return result;
+}
+
+int EditorViewManager::confirmCloseUnsaved(OpenFile* file)
+{
+    Q_UNUSED(file);
+
+    QMessageBox msgBox;
+    msgBox.setText(tr("The file has been modified."));
+    msgBox.setInformativeText("Do you want to save it?");
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Save);
+    return msgBox.exec();
 }
 
 OpenFile* EditorViewManager::fileForDocument(QTextDocument* doc) const
