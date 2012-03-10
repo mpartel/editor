@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    m_editorViewManager = new EditorViewManager(ui->editorTabs, this);
+    m_editorViewManager = new EditorManager(ui->editorTabs, this);
 
     connect(this->ui->action_New, SIGNAL(triggered()), m_editorViewManager, SLOT(startNewFile()));
     connect(this->ui->action_Save, SIGNAL(triggered()), m_editorViewManager, SLOT(saveRequested()));

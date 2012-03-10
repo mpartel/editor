@@ -1,5 +1,5 @@
-#ifndef EDITORVIEWMANAGER_H
-#define EDITORVIEWMANAGER_H
+#ifndef EDITORMANAGER_H
+#define EDITORMANAGER_H
 
 #include <QObject>
 #include <QList>
@@ -8,11 +8,13 @@
 #include <QPair>
 #include "OpenFile.h"
 
-class EditorViewManager : public QObject
+/** Manages OpenFile objects and the editor tabs that view them.
+  */
+class EditorManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit EditorViewManager(QTabWidget* tabWidget, QObject *parent = 0);
+    explicit EditorManager(QTabWidget* tabWidget, QObject *parent = 0);
 
 signals:
     
@@ -48,4 +50,4 @@ private:
     QList<int> tabsForFile(OpenFile* file) const;
 };
 
-#endif // EDITORVIEWMANAGER_H
+#endif // EDITORMANAGER_H

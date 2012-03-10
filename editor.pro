@@ -7,10 +7,10 @@ TEMPLATE = app
 SOURCES += main.cpp\
         MainWindow.cpp \
     OpenFile.cpp \
-    EditorViewManager.cpp
+    EditorManager.cpp
 
 HEADERS  += MainWindow.h \
     OpenFile.h \
-    EditorViewManager.h
+    EditorManager.h
 
 FORMS    += MainWindow.ui

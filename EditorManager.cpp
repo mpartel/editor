@@ -1,23 +1,23 @@
-#include "EditorViewManager.h"
+#include "EditorManager.h"
 #include <QTextEdit>
 #include <QMessageBox>
 #include <QFileDialog>
 
-EditorViewManager::EditorViewManager(QTabWidget* tabWidget, QObject *parent) :
+EditorManager::EditorManager(QTabWidget* tabWidget, QObject *parent) :
     QObject(parent),
     m_tabWidget(tabWidget)
 {
     connect(m_tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(tabCloseRequested(int)));
 }
 
-void EditorViewManager::startNewFile()
+void EditorManager::startNewFile()
 {
     OpenFile* file = new OpenFile(QString::null, this);
     connectErrorSignals(file);
     addOpenFile(file);
 }
 
-void EditorViewManager::openFile(QString path)
+void EditorManager::openFile(QString path)
 {
     OpenFile* file = new OpenFile(path, this);
     connectErrorSignals(file);
@@ -30,7 +30,7 @@ void EditorViewManager::openFile(QString path)
     addOpenFile(file);
 }
 
-bool EditorViewManager::saveRequested()
+bool EditorManager::saveRequested()
 {
     OpenFile* f = activeOpenFile();
     if (f) {
@@ -46,7 +46,7 @@ bool EditorViewManager::saveRequested()
     return false;
 }
 
-bool EditorViewManager::closeAllRequested()
+bool EditorManager::closeAllRequested()
 {
     foreach (OpenFile* file, m_openFiles) {
         if (file->document()->isModified()) {
@@ -68,7 +68,7 @@ bool EditorViewManager::closeAllRequested()
     return true;
 }
 
-void EditorViewManager::tabCloseRequested(int index)
+void EditorManager::tabCloseRequested(int index)
 {
     QWidget* widget = m_tabWidget->widget(index);
     QTextEdit* editor = dynamic_cast<QTextEdit*>(widget);
@@ -94,20 +94,20 @@ void EditorViewManager::tabCloseRequested(int index)
     delete widget;
 }
 
-void EditorViewManager::fileUnreferenced(OpenFile* file)
+void EditorManager::fileUnreferenced(OpenFile* file)
 {
     m_openFiles.removeAll(file);
     file->deleteLater();
 }
 
-void EditorViewManager::updateFileTitle(OpenFile* file)
+void EditorManager::updateFileTitle(OpenFile* file)
 {
     foreach (int tabIndex, tabsForFile(file)) {
         m_tabWidget->setTabText(tabIndex, tabTitle(file));
     }
 }
 
-void EditorViewManager::showReadError(OpenFile* file, QString detail)
+void EditorManager::showReadError(OpenFile* file, QString detail)
 {
     QMessageBox msgBox;
     msgBox.setIcon(QMessageBox::Critical);
@@ -116,7 +116,7 @@ void EditorViewManager::showReadError(OpenFile* file, QString detail)
     msgBox.exec();
 }
 
-void EditorViewManager::showWriteError(OpenFile* file, QString detail)
+void EditorManager::showWriteError(OpenFile* file, QString detail)
 {
     QMessageBox msgBox;
     msgBox.setIcon(QMessageBox::Critical);
@@ -125,7 +125,7 @@ void EditorViewManager::showWriteError(OpenFile* file, QString detail)
     msgBox.exec();
 }
 
-QTextDocument* EditorViewManager::activeDocument() const
+QTextDocument* EditorManager::activeDocument() const
 {
     QTextEdit* editor = dynamic_cast<QTextEdit*>(m_tabWidget->currentWidget());
     if (editor) {
@@ -135,7 +135,7 @@ QTextDocument* EditorViewManager::activeDocument() const
     }
 }
 
-OpenFile* EditorViewManager::activeOpenFile() const
+OpenFile* EditorManager::activeOpenFile() const
 {
     QTextDocument* doc = activeDocument();
     if (doc) {
@@ -145,13 +145,13 @@ OpenFile* EditorViewManager::activeOpenFile() const
     }
 }
 
-void EditorViewManager::connectErrorSignals(OpenFile* file)
+void EditorManager::connectErrorSignals(OpenFile* file)
 {
     connect(file, SIGNAL(readError(OpenFile*,QString)), this, SLOT(showReadError(OpenFile*,QString)));
     connect(file, SIGNAL(writeError(OpenFile*,QString)), this, SLOT(showWriteError(OpenFile*,QString)));
 }
 
-void EditorViewManager::addOpenFile(OpenFile* file)
+void EditorManager::addOpenFile(OpenFile* file)
 {
     connect(file, SIGNAL(noMoreReferences(OpenFile*)), this, SLOT(fileUnreferenced(OpenFile*)));
     m_openFiles.append(file);
@@ -159,12 +159,13 @@ void EditorViewManager::addOpenFile(OpenFile* file)
     connect(file, SIGNAL(documentModifiedStatusChanged(OpenFile*,bool)), this, SLOT(updateFileTitle(OpenFile*)));
 
     QTextEdit* editor = new QTextEdit(m_tabWidget);
+    file->registerReference(editor);
     editor->setDocument(file->document());
     m_tabWidget->addTab(editor, tabTitle(file));
     m_tabWidget->setCurrentWidget(editor);
 }
 
-QString EditorViewManager::tabTitle(OpenFile* file)
+QString EditorManager::tabTitle(OpenFile* file)
 {
     QString result = file->title();
     if (file->document()->isModified()) {
@@ -173,7 +174,7 @@ QString EditorViewManager::tabTitle(OpenFile* file)
     return result;
 }
 
-int EditorViewManager::confirmCloseUnsaved(OpenFile* file)
+int EditorManager::confirmCloseUnsaved(OpenFile* file)
 {
     Q_UNUSED(file);
 
@@ -185,7 +186,7 @@ int EditorViewManager::confirmCloseUnsaved(OpenFile* file)
     return msgBox.exec();
 }
 
-OpenFile* EditorViewManager::fileForDocument(QTextDocument* doc) const
+OpenFile* EditorManager::fileForDocument(QTextDocument* doc) const
 {
     foreach (OpenFile* file, m_openFiles) {
         if (file->document() == doc) {
@@ -195,7 +196,7 @@ OpenFile* EditorViewManager::fileForDocument(QTextDocument* doc) const
     return 0;
 }
 
-QList<int> EditorViewManager::tabsForFile(OpenFile* file) const
+QList<int> EditorManager::tabsForFile(OpenFile* file) const
 {
     QList<int> result;
     for (int i = 0; i < m_tabWidget->count(); ++i) {

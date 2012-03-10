@@ -24,6 +24,7 @@ QString OpenFile::title() const
 
 void OpenFile::registerReference(QObject* obj)
 {
+    m_refcount += 1;
     connect(obj, SIGNAL(destroyed()), this, SLOT(decrementRefcount()));
 }
 
@@ -82,6 +83,7 @@ void OpenFile::emitDocumentModifiedStatusChanged(bool newStatus)
     emit documentModifiedStatusChanged(this, newStatus);
 }
 
+#include <QDebug>
 void OpenFile::decrementRefcount()
 {
     m_refcount -= 1;

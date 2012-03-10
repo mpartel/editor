@@ -5,7 +5,7 @@
 #include <QList>
 #include <QCloseEvent>
 #include "OpenFile.h"
-#include "EditorViewManager.h"
+#include "EditorManager.h"
 
 namespace Ui {
 class MainWindow;
@@ -28,7 +28,7 @@ protected:
 
 private:
     Ui::MainWindow* ui;
-    EditorViewManager* m_editorViewManager;
+    EditorManager* m_editorViewManager;
 };
 
 #endif // MAINWINDOW_H
