@@ -16,6 +16,9 @@ class EditorManager : public QObject
 public:
     explicit EditorManager(QTabWidget* tabWidget, QObject *parent = 0);
 
+    QTextDocument* activeDocument() const; // may be null
+    OpenFile* activeOpenFile() const; // may be null
+
 signals:
     
 public slots:
@@ -37,9 +40,6 @@ private slots:
 private:
     QList<OpenFile*> m_openFiles;
     QTabWidget* m_tabWidget;
-
-    QTextDocument* activeDocument() const; // or null
-    OpenFile* activeOpenFile() const; // or null
 
     void connectErrorSignals(OpenFile* file);
     void addOpenFile(OpenFile* file);

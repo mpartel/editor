@@ -103,7 +103,7 @@
    <widget class="QWidget" name="bottomDockContents">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QTextEdit" name="outputTextEdit"/>
+      <widget class="IOView" name="ioView"/>
      </item>
     </layout>
    </widget>
@@ -165,12 +165,22 @@
    </property>
   </action>
   <action name="actionStop_program">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>&amp;Stop program</string>
    </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>IOView</class>
+   <extends>QTextEdit</extends>
+   <header>IOView.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

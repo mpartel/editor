@@ -9,6 +9,8 @@ OpenFile::OpenFile(QString path, QObject* parent) :
     m_doc(new QTextDocument(this)),
     m_refcount(0)
 {
+    m_doc->setDefaultFont(QFont("Courier New", 10));
+
     connect(m_doc, SIGNAL(modificationChanged(bool)), this, SLOT(emitDocumentModifiedStatusChanged(bool)));
 }
 
@@ -18,7 +20,7 @@ QString OpenFile::title() const
         return "Untitled";
     } else {
         QFileInfo fi(m_path);
-        return fi.baseName();
+        return fi.fileName();
     }
 }
 

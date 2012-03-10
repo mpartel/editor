@@ -12,6 +12,26 @@ EditorManager::EditorManager(QTabWidget* tabWidget, QObject *parent) :
     connect(m_tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(tabCloseRequested(int)));
 }
 
+QTextDocument* EditorManager::activeDocument() const
+{
+    QTextEdit* editor = dynamic_cast<QTextEdit*>(m_tabWidget->currentWidget());
+    if (editor) {
+        return editor->document();
+    } else {
+        return 0;
+    }
+}
+
+OpenFile* EditorManager::activeOpenFile() const
+{
+    QTextDocument* doc = activeDocument();
+    if (doc) {
+        return fileForDocument(doc);
+    } else {
+        return 0;
+    }
+}
+
 void EditorManager::startNewFile()
 {
     OpenFile* file = new OpenFile(QString::null, this);
@@ -135,26 +155,6 @@ void EditorManager::showWriteError(OpenFile* file, QString detail)
     msgBox.exec();
 }
 
-QTextDocument* EditorManager::activeDocument() const
-{
-    QTextEdit* editor = dynamic_cast<QTextEdit*>(m_tabWidget->currentWidget());
-    if (editor) {
-        return editor->document();
-    } else {
-        return 0;
-    }
-}
-
-OpenFile* EditorManager::activeOpenFile() const
-{
-    QTextDocument* doc = activeDocument();
-    if (doc) {
-        return fileForDocument(doc);
-    } else {
-        return 0;
-    }
-}
-
 void EditorManager::connectErrorSignals(OpenFile* file)
 {
     connect(file, SIGNAL(readError(OpenFile*,QString)), this, SLOT(showReadError(OpenFile*,QString)));
@@ -172,8 +172,8 @@ void EditorManager::addOpenFile(OpenFile* file)
     new PythonHighlighter(file->document());
 
     file->registerReference(editor);
+    editor->setAcceptRichText(false);
     editor->setDocument(file->document());
-    editor->setFontFamily("Courier New");
     m_tabWidget->addTab(editor, tabTitle(file));
     m_tabWidget->setCurrentWidget(editor);
 }

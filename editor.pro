@@ -8,13 +8,17 @@ SOURCES += main.cpp\
     OpenFile.cpp \
     EditorManager.cpp \
     PythonHighlighter.cpp \
-    PythonEdit.cpp
+    PythonEdit.cpp \
+    TextLineBuffer.cpp \
+    IOView.cpp
 
 HEADERS  += MainWindow.h \
     OpenFile.h \
     EditorManager.h \
     PythonHighlighter.h \
-    PythonEdit.h
+    PythonEdit.h \
+    TextLineBuffer.h \
+    IOView.h
 
 FORMS    += MainWindow.ui
 
