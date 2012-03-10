@@ -5,8 +5,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        MainWindow.cpp
+        MainWindow.cpp \
+    OpenFile.cpp \
+    EditorViewManager.cpp
 
-HEADERS  += MainWindow.h
+HEADERS  += MainWindow.h \
+    OpenFile.h \
+    EditorViewManager.h
 
 FORMS    += MainWindow.ui
