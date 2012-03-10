@@ -33,6 +33,7 @@ void IOView::lineComplete(QString line)
     replaceLastLineWith(line);
     m_beforeLastLine.movePosition(QTextCursor::End);
     m_beforeLastLine.insertText("\n");
+    ensureCursorVisible();
 }
 
 void IOView::partialLine(QString line)
