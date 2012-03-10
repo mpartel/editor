@@ -53,12 +53,20 @@
    </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">
-     <string>Window</string>
+     <string>&amp;Window</string>
     </property>
     <addaction name="actionClose_Tab"/>
     <addaction name="actionDuplicate_Tab"/>
    </widget>
+   <widget class="QMenu" name="menuRun">
+    <property name="title">
+     <string>&amp;Run</string>
+    </property>
+    <addaction name="actionRun_program"/>
+    <addaction name="actionStop_program"/>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menuRun"/>
    <addaction name="menuWindow"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -71,6 +79,9 @@
    <addaction name="actionNew"/>
    <addaction name="actionOpen"/>
    <addaction name="actionSave"/>
+   <addaction name="separator"/>
+   <addaction name="actionRun_program"/>
+   <addaction name="actionStop_program"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="leftDock">
@@ -143,6 +154,19 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+D</string>
+   </property>
+  </action>
+  <action name="actionRun_program">
+   <property name="text">
+    <string>&amp;Run program</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R, F5</string>
+   </property>
+  </action>
+  <action name="actionStop_program">
+   <property name="text">
+    <string>&amp;Stop program</string>
    </property>
   </action>
  </widget>
