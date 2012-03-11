@@ -27,6 +27,11 @@ bool TextLineBuffer::readFrom(QIODevice* io)
     return ok;
 }
 
+void TextLineBuffer::discardBufferedLine()
+{
+    m_lineBuf.clear();
+}
+
 void TextLineBuffer::flushLastLine()
 {
     emit lineComplete(QString::fromUtf8(m_lineBuf));

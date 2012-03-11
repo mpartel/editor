@@ -2,7 +2,7 @@
 
 IOView::IOView(QWidget* parent) :
     QTextEdit(parent),
-    m_device(0),
+    m_process(new QProcess(this)),
     m_lineBuf(new TextLineBuffer(this))
 {
     m_beforeLastLine = QTextCursor(document());
@@ -11,10 +11,15 @@ IOView::IOView(QWidget* parent) :
     connect(m_lineBuf, SIGNAL(partialLine(QString)), this, SLOT(lineComplete(QString)));
 }
 
-void IOView::setIODevice(QIODevice* device)
+void IOView::setProcess(QProcess* process)
 {
-    m_device = device;
-    connect(m_device, SIGNAL(readyRead()), this, SLOT(outputAvailable()));
+    if (m_process->parent() == this) {
+        delete m_process;
+    }
+    m_process = process;
+    m_process->setProcessChannelMode(QProcess::MergedChannels);
+    connect(m_process, SIGNAL(readyReadStandardOutput()), this, SLOT(outputAvailable()));
+    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(processFinished()));
 }
 
 void IOView::writeStdin(QString input)
@@ -25,7 +30,13 @@ void IOView::writeStdin(QString input)
 
 void IOView::outputAvailable()
 {
-    m_lineBuf->readFrom(m_device);
+    m_lineBuf->readFrom(m_process);
+}
+
+void IOView::processFinished()
+{
+    m_lineBuf->readFrom(m_process);
+    m_lineBuf->discardBufferedLine();
 }
 
 void IOView::lineComplete(QString line)

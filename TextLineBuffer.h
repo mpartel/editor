@@ -18,6 +18,7 @@ public:
     TextLineBuffer(QObject* parent = 0);
 
     bool readFrom(QIODevice* io);
+    void discardBufferedLine();
 
 signals:
     /** Emitted when a full line is read.

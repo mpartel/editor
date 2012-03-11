@@ -3,7 +3,7 @@
 
 #include <QTextEdit>
 #include <QTextCursor>
-#include <QIODevice>
+#include <QProcess>
 #include "TextLineBuffer.h"
 
 class IOView : public QTextEdit
@@ -12,18 +12,20 @@ class IOView : public QTextEdit
 public:
     explicit IOView(QWidget* parent = 0);
 
-    void setIODevice(QIODevice* device);
+    void setProcess(QProcess* process);
 
     void writeStdin(QString input);
 
 private slots:
     void outputAvailable();
+    void processFinished();
+
     void lineComplete(QString line);
     void partialLine(QString line);
 
 private:
     QTextCursor m_beforeLastLine;
-    QIODevice* m_device;
+    QProcess* m_process;
     TextLineBuffer* m_lineBuf;
 
     void replaceLastLineWith(QString line);

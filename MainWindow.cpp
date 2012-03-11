@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_process, SIGNAL(started()), this, SLOT(processStarted()));
     connect(m_process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(processStartError(QProcess::ProcessError)));
     connect(m_process, SIGNAL(finished(int)), this, SLOT(processFinished(int)));
-    ui->ioView->setIODevice(m_process);
+    ui->ioView->setProcess(m_process);
 }
 
 MainWindow::~MainWindow()
