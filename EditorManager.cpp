@@ -37,6 +37,7 @@ void EditorManager::startNewFile()
     OpenFile* file = new OpenFile(QString::null, this);
     connectErrorSignals(file);
     addOpenFile(file);
+    openTabFor(file);
 }
 
 void EditorManager::openFile(QString path)
@@ -50,6 +51,7 @@ void EditorManager::openFile(QString path)
     }
 
     addOpenFile(file);
+    openTabFor(file);
 }
 
 bool EditorManager::saveRequested()
@@ -120,7 +122,7 @@ void EditorManager::duplicateTab(int index)
 {
     OpenFile* file = fileForTab(index);
     if (file) {
-        addOpenFile(file);
+        openTabFor(file);
     }
 }
 
@@ -167,7 +169,10 @@ void EditorManager::addOpenFile(OpenFile* file)
     m_openFiles.append(file);
 
     connect(file, SIGNAL(documentModifiedStatusChanged(OpenFile*,bool)), this, SLOT(updateFileTitle(OpenFile*)));
+}
 
+void EditorManager::openTabFor(OpenFile* file)
+{
     QTextEdit* editor = new PythonEdit(m_tabWidget);
     new PythonHighlighter(file->document());
 

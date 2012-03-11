@@ -43,6 +43,7 @@ private:
 
     void connectErrorSignals(OpenFile* file);
     void addOpenFile(OpenFile* file);
+    void openTabFor(OpenFile* file);
 
     QString tabTitle(OpenFile* file);
     int confirmCloseUnsaved(OpenFile* file);
