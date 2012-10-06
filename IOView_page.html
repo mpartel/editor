@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            body {
+                font-family: monospace;
+            }
+            #prompt {
+                display: inline-block;
+                color: #008080;
+            }
+            span.input {
+                color: #008080;
+            }
+        </style>
+        <title>I/O</title>
+        <script>
+            window.onload = function() {
+                document.getElementById('prompt').onkeypress = function(e) {
+                    if (e.which == 13) {
+                        var prompt = document.getElementById('prompt');
+                        window.IOView.writeStdin(prompt.value);
+                        prompt.value = "";
+                    }
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div id="start">
+            <input id="prompt" name="prompt" type="text" placeholder="input" />
+        </div>
+        <div id="output"></div>
+        <div id="end"></div>
+    </body>
+</html>

@@ -15,9 +15,10 @@ public:
 
     void setProcess(QProcess *process);
 
-    void writeStdin(QString input);
-
     void clear();
+
+public slots:
+    void writeStdin(QString input);
 
 private slots:
     void outputAvailable();
@@ -30,6 +31,7 @@ private:
     QProcess* m_process;
     TextLineBuffer* m_lineBuf;
     QWebElement m_textElement;
+    QWebElement m_inputPrompt;
 
     void replaceLastLineWith(QString line);
     void newLastLine();

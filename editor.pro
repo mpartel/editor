@@ -24,4 +24,8 @@ HEADERS  += MainWindow.h \
 FORMS    += MainWindow.ui
 
 OTHER_FILES += \
-    TODO.txt
+    TODO.txt \
+    IOView_page.html
+
+RESOURCES += \
+    resources.qrc
