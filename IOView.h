@@ -2,20 +2,22 @@
 #define IOVIEW_H
 
 #include "common.h"
-#include <QTextEdit>
-#include <QTextCursor>
+#include <QWebView>
 #include <QProcess>
+#include <QWebElement>
 #include "TextLineBuffer.h"
 
-class IOView : public QTextEdit
+class IOView : public QWebView
 {
     Q_OBJECT
 public:
-    explicit IOView(QWidget* parent = 0);
+    explicit IOView(QWidget *parent = 0);
 
-    void setProcess(QProcess* process);
+    void setProcess(QProcess *process);
 
     void writeStdin(QString input);
+
+    void clear();
 
 private slots:
     void outputAvailable();
@@ -25,11 +27,12 @@ private slots:
     void partialLine(QString line);
 
 private:
-    QTextCursor m_beforeLastLine;
     QProcess* m_process;
     TextLineBuffer* m_lineBuf;
+    QWebElement m_textElement;
 
     void replaceLastLineWith(QString line);
+    void newLastLine();
 };
 
 #endif // IOVIEW_H

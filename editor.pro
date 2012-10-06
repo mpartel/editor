@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui webkit
 
 TARGET = editor
 TEMPLATE = app
