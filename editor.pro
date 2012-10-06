@@ -18,7 +18,8 @@ HEADERS  += MainWindow.h \
     PythonHighlighter.h \
     PythonEdit.h \
     TextLineBuffer.h \
-    IOView.h
+    IOView.h \
+    common.h
 
 FORMS    += MainWindow.ui
 

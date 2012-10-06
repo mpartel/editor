@@ -1,6 +1,7 @@
 #ifndef IOVIEW_H
 #define IOVIEW_H
 
+#include "common.h"
 #include <QTextEdit>
 #include <QTextCursor>
 #include <QProcess>
